@@ -8,7 +8,6 @@ on:
 
 env:
   BUILD_TYPE: Release
-  PAHO_MQTT_C_VERSION: v1.3.12
 
 jobs:
   build:
@@ -26,36 +25,8 @@ jobs:
         sudo apt-get install -y protobuf-compiler libprotobuf-dev
         # Install nlohmann-json
         sudo apt-get install -y nlohmann-json3-dev
-        # Install SSL for Paho MQTT
-        sudo apt-get install -y libssl-dev
-
-    - name: Install Paho MQTT
-      run: |
-        # Install Paho MQTT C
-        git clone https://github.com/eclipse/paho.mqtt.c.git
-        cd paho.mqtt.c
-        git checkout ${PAHO_MQTT_C_VERSION}
-        cmake -Bbuild -H. \
-          -DPAHO_ENABLE_TESTING=OFF \
-          -DPAHO_BUILD_STATIC=ON \
-          -DPAHO_WITH_SSL=ON \
-          -DPAHO_HIGH_PERFORMANCE=ON \
-          -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        sudo cmake --build build/ --target install
-        sudo ldconfig
-        cd ..
-        
-        # Install Paho MQTT C++
-        git clone https://github.com/eclipse/paho.mqtt.cpp.git
-        cd paho.mqtt.cpp
-        cmake -Bbuild -H. \
-          -DPAHO_BUILD_STATIC=ON \
-          -DPAHO_BUILD_DOCUMENTATION=FALSE \
-          -DPAHO_BUILD_SAMPLES=FALSE \
-          -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        sudo cmake --build build/ --target install
-        sudo ldconfig
-        cd ..
+        # Install Paho MQTT for examples
+        sudo apt-get install -y libpaho-mqtt-dev libpaho-mqttpp-dev
 
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
@@ -65,10 +36,4 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration
       run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
-
-    - name: Build Examples
-      working-directory: ${{github.workspace}}/build
-      run: make host_app_example
-
