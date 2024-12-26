@@ -1,7 +1,6 @@
 
-#include "../include/HostApp.h"
-#include "../include/MQTTClient.h" // Assuming this is the interface for the MQTT client
-#include "../include/StateManager.h" // Assuming this is the interface for the state manager
+#include "HostApp.h"
+#include "MQTTClient.h" // Assuming this is the interface for the MQTT client
 
 #include <memory>
 #include <iostream>
