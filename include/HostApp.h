@@ -4,7 +4,6 @@
 #include <memory>
 #include <string>
 #include "IMQTTClient.h"
-#include "IStateManager.h"
 #include <nlohmann/json.hpp>
 
 namespace sparkplugb {
@@ -179,7 +178,6 @@ private:
     std::string createStatePayload(bool online);
 
     std::shared_ptr<IMQTTClient> mqttClient_; ///< MQTT client for network communication
-    std::shared_ptr<IStateManager> stateManager_; ///< Manager for maintaining system state
     std::string sparkplugHostId_; ///< Unique identifier for this Sparkplug host
     std::shared_ptr<INodeDeviceNotification> notificationHandler_; ///< Handler for node/device notifications
 };
