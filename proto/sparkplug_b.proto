@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package sparkplug.v3;
+
+message Payload {
+    uint64 timestamp = 1;
+    uint64 seq = 2;
+    repeated Metric metrics = 3;
+}
+
+message Metric {
+    string name = 1;
+    uint64 timestamp = 2;
+    DataType datatype = 3;
+    bool is_historical = 4;
+    bool is_transient = 5;
+    bool is_null = 6;
+    MetricValue value = 7;
+}
+
+message MetricValue {
+    oneof value {
+        int32 int_value = 1;
+        uint32 uint_value = 2;
+        sint32 sint_value = 3;
+        int64 long_value = 4;
+        uint64 ulong_value = 5;
+        float float_value = 6;
+        double double_value = 7;
+        bool boolean_value = 8;
+        string string_value = 9;
+        bytes bytes_value = 10;
+        DataSet dataset_value = 11;
+        Template template_value = 12;
+    }
+}
+
+enum DataType {
+    Unknown = 0;
+    Int8 = 1;
+    Int16 = 2;
+    Int32 = 3;
+    Int64 = 4;
+    UInt8 = 5;
+    UInt16 = 6;
+    UInt32 = 7;
+    UInt64 = 8;
+    Float = 9;
+    Double = 10;
+    Boolean = 11;
+    String = 12;
+    DateTime = 13;
+    Text = 14;
+    UUID = 15;
+    DataSetType = 16;
+    Bytes = 17;
+    File = 18;
+    TemplateType = 19;
+}
+
+message DataSet {
+    repeated string column_names = 1;
+    repeated DataType types = 2;
+    repeated Row rows = 3;
+}
+
+message Row {
+    repeated MetricValue elements = 1;
+}
+
+message Template {
+    string version = 1;
+    repeated Metric metrics = 2;
+    repeated Parameter parameters = 3;
+}
+
+message Parameter {
+    string name = 1;
+    DataType type = 2;
+    MetricValue value = 3;
+} 
